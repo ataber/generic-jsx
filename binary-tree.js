@@ -1,22 +1,32 @@
 "use strict";
 
-class BinaryTree
-{
-    constructor(options)
-    {
-        var value = options.value;
-        var children = options.children;
-        var left = children[0];
-        var right = children[1];
-
-        this.value = value;
-        
-        if (left)
-            this.left = typeof left === "function" ? left() : left;
-
-        if (right)
-            this.right = typeof right === "function" ? right() : right;
+class BinaryTree {
+  constructor({value, children, operation}) {
+    this.value = value;
+    this.operation = operation;
+    if (children.length == 0 || !operation) {
+      this.computed = true;
+    } else {
+      this.computed = false;
     }
+
+    this.children = children;
+  }
+  render() {
+    if (!this.computed) {
+      this.children.map((n) => {
+        if (!n.computed) {
+          return n.render();
+        } else {
+          return n.value;
+        }
+      })
+      this.value = this.operation(...this.children.map((n) => { return n.value; }));
+      this.computed = true;
+    }
+
+    return this.value;
+  }
 }
 
 module.exports = BinaryTree;

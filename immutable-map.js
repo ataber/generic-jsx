@@ -1,4 +1,3 @@
-
 var I = require("immutable");
 
 function Map(options)
